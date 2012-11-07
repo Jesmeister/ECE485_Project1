@@ -2,7 +2,7 @@ L1 Instruction Cache
 
 Receive incoming address request
 
-	Split address request into two variables
+	Split address request into three variables
 
 		Req_Index = lower 20 bits of address request
 
@@ -21,27 +21,32 @@ Receive incoming address request
 
 			Cache_index = Cache_index + Req_Index 
 
-			If MSB of Cache_index[i] is 1(or true) data is valid
+
+			If valid bit of either way of Cache_index[i] is 1(or true) data is valid
 				Then compare Tags
-					If Tags match 
+					If Tags match for either way
 						Increment CacheHIT to keep track of # of hits
-						then read data
-			
-					else tags don't match
+						read data
+						update LRU state			
+
+					else neither tags match
 						Increment CacheMISS to keep track of # of misses
 						then send current indexed data from L1 to L2. 
-						Request new data from L2 and load into L1	
+						Request new data from L2 and load into L1
+						Update LRU 	
 		
-				Else MSB of Cache_index[i] is 0(or false) data is invalid
+				Else both valid bits of Cache_index[i] is 0(or false) data is invalid
 					Increment CacheMISS		
 					Then Request data from L2
+					Load data into cache
+					Update LRU
 	
 
 		Case (3)
 
 
 		Case (8)
-			Then for loop through Cache_index[] until end of array
+			For loop through Cache_index[] until end of array
 				Clear
 			end loop
 	
